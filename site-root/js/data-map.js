@@ -62,12 +62,12 @@
         map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/laurenancona/cjazrhzyn59192slbs8zc501n',
-            center: [-75.1694, 39.9294],
+            center: [-75.15, 39.95],
             bearing: 9.2, // Rotate Philly ~9° off of north, thanks Billy Penn.
             zoom: 12,
             maxZoom: 19,
             minZoom: 12,
-            pitch: 60,
+            //pitch: 60,
             attributionControl: true,
             touchRotate: false
         });
