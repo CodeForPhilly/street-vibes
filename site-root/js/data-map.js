@@ -1,28 +1,29 @@
 (function() {
-    if (!sensorData) {
-        console.error('sensorData is not defined');
-        return;
-    }
-
-
     // global state
-    var sensorDataLength = sensorData.length,
+    var sensorData, sensorDataLength,
         timestamps = [], timestampMin, timestampMax, timestampDelta, timestampsLength,
         timestampsMap = {},
         markerInitialized = false,
         map, slider, marker, popup;
 
 
-    // initialize application
-    _analyzeData();
-    _setupMap();
-    _setupSlider();
+    // Pull sensor data from api
+    $.get("http://street-vibes.poplar.phl.io/data-points?format=json").done(function(data) {
+        sensorData = data.data;
+
+        // initialize application
+        _analyzeData();
+        _setupMap();
+        _setupSlider();
+    });
 
 
     // function library
     function _analyzeData() {
         var i = 0, datum, timestamp;
-    
+
+        sensorDataLength = sensorData.length;
+
         for (; i < sensorDataLength; i++) {
             datum = sensorData[i];
             timestamp = datum.Created;
@@ -100,7 +101,7 @@
                     if (value == timestampMin || value == timestampMax) {
                         return 1;
                     }
-    
+
                     return 0;
                 },
                 format: {
@@ -127,7 +128,7 @@
         }
 
         marker.setLngLat([datum.ReceiverLongitude, datum.ReceiverLatitude]); // TODO: use device location
-        
+
         if (!markerInitialized) {
             marker.setPopup(popup);
             marker.addTo(map);
