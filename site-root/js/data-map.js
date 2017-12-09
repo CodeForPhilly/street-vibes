@@ -8,21 +8,28 @@
 
 
     // Pull sensor data from api
-    $.get("http://street-vibes.poplar.phl.io/data-points?format=json").done(function(data) {
-        sensorData = data.data;
+    if (window.sensorData) {
+        _loadData(window.sensorData);
+    } else {
+        $.get("http://street-vibes.poplar.phl.io/data-points?format=json").done(function(data) {
+            _loadData(data.data);
+        });
+    }
+
+
+    // function library
+    function _loadData(data) {
+        sensorData = data;
+        sensorDataLength = data.length;
 
         // initialize application
         _analyzeData();
         _setupMap();
         _setupSlider();
-    });
+    }
 
-
-    // function library
     function _analyzeData() {
         var i = 0, datum, timestamp;
-
-        sensorDataLength = sensorData.length;
 
         for (; i < sensorDataLength; i++) {
             datum = sensorData[i];
