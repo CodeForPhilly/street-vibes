@@ -13,8 +13,8 @@
 
 
     // Pull sensor data from api
-    $.get("http://street-vibes.poplar.phl.io/data-points?format=json").done(function (data) {
-        _loadData(data.data);
+    $.get('http://street-vibes.poplar.phl.io/rides').done(function (data) {
+        _loadData(data);
     });
 
 
@@ -34,7 +34,7 @@
 
         for (; i < sensorDataLength; i++) {
             datum = sensorData[i];
-            timestamp = datum.Created;
+            timestamp = moment(datum.start_time).unix();
             timestamps.push(timestamp);
             timestampsMap[timestamp] = datum; // WARNING: this will drop any previous value at the same timestamp, not suitable for multiple vehicles
         }
@@ -135,7 +135,9 @@
             return;
         }
 
-        marker.setLngLat([datum.ReceiverLongitude, datum.ReceiverLatitude]); // TODO: use device location
+        console.log('loadDatum(%o) map=%o marker=%o', datum, map, marker);
+
+        marker.setLngLat([datum.start_lon, datum.start_lat]); // TODO: draw line with datum.geojson
 
         if (!markerInitialized) {
             marker.setPopup(popup);
@@ -143,13 +145,13 @@
             markerInitialized = true;
         }
 
-        popup.setHTML([
-            '<dl>',
-            '    <dt>Sample Time</dt><dd>'+moment.unix(datum.Created).format('lll')+'</dd>',
-            '    <dt>Temperature</dt><dd>'+datum.Temperature+'</dd>',
-            '    <dt>Relative Humidity</dt><dd>'+datum.Humidity+'</dd>',
-            '    <dt>Particle Concentration</dt><dd>'+datum.Concentration+'</dd>',
-            '</dl>'
-        ].join(''));
+        // popup.setHTML([
+        //     '<dl>',
+        //     '    <dt>Sample Time</dt><dd>'+moment.unix(datum.Created).format('lll')+'</dd>',
+        //     '    <dt>Temperature</dt><dd>'+datum.Temperature+'</dd>',
+        //     '    <dt>Relative Humidity</dt><dd>'+datum.Humidity+'</dd>',
+        //     '    <dt>Particle Concentration</dt><dd>'+datum.Concentration+'</dd>',
+        //     '</dl>'
+        // ].join(''));
     }
 })();
