@@ -43,21 +43,25 @@ const geoJsonPath = path.join(__dirname, 'indego-trips-2017-q3.first100.geojson'
                 }
             });
 
-            row.route = directionsResponse.data.routes[0];
+            const route = directionsResponse.data.routes[0];
+
             features.push({
                 type: 'Feature',
-                geometry: row.route.geometry
+                geometry: route.geometry,
+                properties: _.clone(row)
             });
+
+            row.route = route;
         } catch (err) {
             debugger;
         }
     }
 
-    fs.writeFileSync(jsonPath, JSON.stringify(csvData));
+    fs.writeFileSync(jsonPath, JSON.stringify(csvData, null, 4));
     fs.writeFileSync(geoJsonPath, JSON.stringify({
         type: 'FeatureCollection',
         features: features
-    }));
+    }, null, 4));
 
     console.log('done, wrote %o rows to %o', csvData.length, jsonPath);
 })();
