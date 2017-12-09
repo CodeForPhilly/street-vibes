@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/CodeForPhilly/street-vibes#readme",
   "dependencies": {
-    "axios": "^0.17.1"
+    "axios": "^0.17.1",
+    "promised-csv": "^1.0.1",
+    "underscore": "^1.8.3"
   }
 }
