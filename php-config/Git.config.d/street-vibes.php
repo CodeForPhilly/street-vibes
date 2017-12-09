@@ -8,6 +8,7 @@ Git::$repositories['street-vibes'] = [
         'html-templates',
         'php-classes',
         'php-config',
-        'site-root'
+        'site-root',
+        'data-generator'
     ]
 ];
