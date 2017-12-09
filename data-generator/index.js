@@ -44,7 +44,10 @@ const geoJsonPath = path.join(__dirname, 'indego-trips-2017-q3.first100.geojson'
             });
 
             row.route = directionsResponse.data.routes[0];
-            features.push(row.route.geometry);
+            features.push({
+                type: 'Feature',
+                geometry: row.route.geometry
+            });
         } catch (err) {
             debugger;
         }
