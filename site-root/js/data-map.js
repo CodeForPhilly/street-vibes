@@ -13,15 +13,15 @@
 
 
     // Pull sensor data from api
-    $.get('http://street-vibes.poplar.phl.io/rides').done(function (data) {
-        _loadData(data);
+    $.get('http://street-vibes.poplar.phl.io/rides').done(function (geojson) {
+        _loadData(geojson);
     });
 
 
     // function library
-    function _loadData (data) {
-        sensorData = data;
-        sensorDataLength = data.length;
+    function _loadData (geojson) {
+        sensorData = geojson.features;
+        sensorDataLength = sensorData.length;
 
         // initialize application
         _analyzeData();
@@ -34,7 +34,7 @@
 
         for (; i < sensorDataLength; i++) {
             datum = sensorData[i];
-            timestamp = moment(datum.start_time).unix();
+            timestamp = moment(datum.properties.start_time).unix();
             timestamps.push(timestamp);
             timestampsMap[timestamp] = datum; // WARNING: this will drop any previous value at the same timestamp, not suitable for multiple vehicles
         }
@@ -137,7 +137,7 @@
 
         console.log('loadDatum(%o) map=%o marker=%o', datum, map, marker);
 
-        marker.setLngLat([datum.start_lon, datum.start_lat]); // TODO: draw line with datum.geojson
+        marker.setLngLat([datum.properties.start_lon, datum.properties.start_lat]); // TODO: draw line with datum.geojson
 
         if (!markerInitialized) {
             marker.setPopup(popup);
@@ -145,13 +145,15 @@
             markerInitialized = true;
         }
 
-        // popup.setHTML([
-        //     '<dl>',
-        //     '    <dt>Sample Time</dt><dd>'+moment.unix(datum.Created).format('lll')+'</dd>',
-        //     '    <dt>Temperature</dt><dd>'+datum.Temperature+'</dd>',
-        //     '    <dt>Relative Humidity</dt><dd>'+datum.Humidity+'</dd>',
-        //     '    <dt>Particle Concentration</dt><dd>'+datum.Concentration+'</dd>',
-        //     '</dl>'
-        // ].join(''));
+        popup.setHTML([
+            '<dl>',
+            '    <dt>Start Time</dt><dd>'+moment(datum.properties.start_time).format('lll')+'</dd>',
+            '    <dt>End Time</dt><dd>'+moment(datum.properties.end_time).format('lll')+'</dd>',
+            '    <dt>Bike ID</dt><dd>'+datum.properties.bike_id+'</dd>',
+            '    <dt>Trip ID</dt><dd>'+datum.properties.trip_id+'</dd>',
+            '    <dt>Stations</dt><dd>'+datum.properties.start_station+'&rarr;'+datum.properties.end_station+'</dd>',
+            '    <dt>Intensity</dt><dd>'+datum.properties.intensity+'</dd>',
+            '</dl>'
+        ].join(''));
     }
 })();
