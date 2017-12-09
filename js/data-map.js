@@ -1,9 +1,11 @@
 (function() {
-    if (!sensorData) {
-        console.error('sensorData is not defined');
-        return;
-    }
+    // Pull sensor data from api
+    $.get("http://street-vibes.poplar.phl.io/data-points?format=json").done(function( data ) {
+        loadSensorData(data.data)
+    });
+})();
 
+function loadSensorData(sensorData) {
 
     // global state
     var sensorDataLength = sensorData.length,
@@ -22,7 +24,7 @@
     // function library
     function _analyzeData() {
         var i = 0, datum, timestamp;
-    
+
         for (; i < sensorDataLength; i++) {
             datum = sensorData[i];
             timestamp = datum.Created;
@@ -100,7 +102,7 @@
                     if (value == timestampMin || value == timestampMax) {
                         return 1;
                     }
-    
+
                     return 0;
                 },
                 format: {
@@ -127,7 +129,7 @@
         }
 
         marker.setLngLat([datum.ReceiverLongitude, datum.ReceiverLatitude]); // TODO: use device location
-        
+
         if (!markerInitialized) {
             marker.setPopup(popup);
             marker.addTo(map);
@@ -143,4 +145,4 @@
             '</dl>'
         ].join(''));
     }
-})();
+}
