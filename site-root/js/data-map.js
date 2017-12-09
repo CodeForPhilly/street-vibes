@@ -57,11 +57,11 @@
     function _setupMap () {
         var markerEl;
 
-        mapboxgl.accessToken = 'pk.eyJ1IjoidGhlbWlnaHR5Y2hyaXMiLCJhIjoiY2ozcmk4dnJ3MDAzbDJ3cjd1dGpkNXUxZSJ9.hb2cLAYkXJqdFrdzoydIpA';
+        mapboxgl.accessToken = 'pk.eyJ1IjoibGF1cmVuYW5jb25hIiwiYSI6ImNqYXp1aXUxNjFreXYzMm1rajhtOXM0dW0ifQ.ZugYWk7x8Ldyaa3ILvx0ZA';
 
         map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v9',
+            style: 'mapbox://styles/laurenancona/cjazrhzyn59192slbs8zc501n',
             center: [-75.1694, 39.9294],
             bearing: 9.2, // Rotate Philly ~9° off of north, thanks Billy Penn.
             zoom: 12,
