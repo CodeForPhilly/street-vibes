@@ -74,8 +74,8 @@
         popup.setText('This is a marker with some data');
 
         markerEl = document.createElement('div');
-        markerEl.className = 'marker-bus';
-        marker = new mapboxgl.Marker(markerEl, {offset: [-27.5, -62]});
+        markerEl.className = 'marker-indego';
+        marker = new mapboxgl.Marker(markerEl, {offset: [-22, -63]});
     }
 
 

@@ -1,7 +1,7 @@
-.marker-bus {
-    width: 55px;
-    height: 62px;
-    background-image: url("../img/bus-marker.png");
+.marker-indego {
+    width: 44px;
+    height: 63px;
+    background-image: url("../img/indego-marker.png");
     background-repeat: no-repeat;
     background-size: contain;
 }
