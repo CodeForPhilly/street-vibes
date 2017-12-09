@@ -26,34 +26,4 @@
 
     <div id='slider' style='margin-bottom: 50px; margin-top: 60px'></div>
     <div id='map' style='height: 500px;'></div>
-
-    <table class="row-stripes cell-borders">
-        <thead>
-            <tr>
-                <th>Timestamp</th>
-                <th>Receiver Location</th>
-                <th>Device Address</th>
-                <th>Raw Payload</th>
-                <th>Device Location</th>
-                <th>Temperature</th>
-                <th>Relative Humidity</th>
-                <th>Particle Concentration</th>
-            </tr>
-        </thead>
-
-        <tbody>
-        {foreach item=DataPoint from=$data}
-            <tr>
-                <td>{$DataPoint->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
-                <td>{$DataPoint->ReceiverLatitude},<br> {$DataPoint->ReceiverLongitude}</td>
-                <td>{$DataPoint->DeviceAddress}</td>
-                <td><code>{$DataPoint->Payload}</code></td>
-                <td>{$DataPoint->DeviceLatitude},<br> {$DataPoint->DeviceLongitude}</td>
-                <td>{$DataPoint->Temperature}</td>
-                <td>{$DataPoint->Humidity}</td>
-                <td>{$DataPoint->Concentration}</td>
-            </tr>
-        {/foreach}
-        </tbody>
-    </table>
 {/block}
