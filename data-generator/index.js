@@ -4,7 +4,8 @@ const axios = require('axios');
 const _ = require('underscore');
 const csvReader = new (require('promised-csv'))(true); // true to remove null rows
 const csvPath = path.join(__dirname, 'indego-trips-2017-q3.first100.csv');
-const outputPath = path.join(__dirname, 'indego-trips-2017-q3.first100.json');
+const jsonPath = path.join(__dirname, 'indego-trips-2017-q3.first100.json');
+const geoJsonPath = path.join(__dirname, 'indego-trips-2017-q3.first100.geojson');
 
 
 (async () => {
@@ -27,6 +28,8 @@ const outputPath = path.join(__dirname, 'indego-trips-2017-q3.first100.json');
     });
 
 
+    const features = [];
+
     for (let row of csvData) {
         const path = encodeURIComponent(`${row.start_lon},${row.start_lat};${row.end_lon},${row.end_lat}`);
 
@@ -40,14 +43,18 @@ const outputPath = path.join(__dirname, 'indego-trips-2017-q3.first100.json');
                 }
             });
 
-            row.geojson = directionsResponse.data.routes[0];
-
+            row.route = directionsResponse.data.routes[0];
+            features.push(row.route.geometry);
         } catch (err) {
             debugger;
         }
     }
 
-    fs.writeFileSync(outputPath, JSON.stringify(csvData));
+    fs.writeFileSync(jsonPath, JSON.stringify(csvData));
+    fs.writeFileSync(geoJsonPath, JSON.stringify({
+        type: 'FeatureCollection',
+        features: features
+    }));
 
-    console.log('done, wrote %o rows to %o', csvData.length, outputPath);
+    console.log('done, wrote %o rows to %o', csvData.length, jsonPath);
 })();
