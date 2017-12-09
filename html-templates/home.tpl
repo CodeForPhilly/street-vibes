@@ -1,6 +1,6 @@
 {extends designs/site.tpl}
 
-{block title}Data Points &mdash; {$dwoo.parent}{/block}
+{block title}Indego Trips &mdash; {$dwoo.parent}{/block}
 
 {block user-tools}{/block}
 {block header-bottom}{/block}
@@ -21,7 +21,7 @@
 
 {block content}
     <header class="page-header">
-        <h1 class="header-title title-1">Data Points</h1>
+        <h1 class="header-title title-1">Indego Trips</h1>
     </header>
 
     <div id='slider' style='margin-bottom: 50px; margin-top: 60px'></div>
