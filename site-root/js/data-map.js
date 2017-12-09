@@ -13,13 +13,9 @@
 
 
     // Pull sensor data from api
-    if (window.sensorData) {
-        _loadData(window.sensorData);
-    } else {
-        $.get("http://street-vibes.poplar.phl.io/data-points?format=json").done(function (data) {
-            _loadData(data.data);
-        });
-    }
+    $.get("http://street-vibes.poplar.phl.io/data-points?format=json").done(function (data) {
+        _loadData(data.data);
+    });
 
 
     // function library
