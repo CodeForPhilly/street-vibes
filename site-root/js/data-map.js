@@ -1,4 +1,9 @@
-(function() {
+/* global mapboxgl */
+/* global noUiSlider */
+/* global moment */
+/* global $ */
+
+(function () {
     // global state
     var sensorData, sensorDataLength,
         timestamps = [], timestampMin, timestampMax, timestampDelta, timestampsLength,
@@ -11,14 +16,14 @@
     if (window.sensorData) {
         _loadData(window.sensorData);
     } else {
-        $.get("http://street-vibes.poplar.phl.io/data-points?format=json").done(function(data) {
+        $.get("http://street-vibes.poplar.phl.io/data-points?format=json").done(function (data) {
             _loadData(data.data);
         });
     }
 
 
     // function library
-    function _loadData(data) {
+    function _loadData (data) {
         sensorData = data;
         sensorDataLength = data.length;
 
@@ -28,7 +33,7 @@
         _setupSlider();
     }
 
-    function _analyzeData() {
+    function _analyzeData () {
         var i = 0, datum, timestamp;
 
         for (; i < sensorDataLength; i++) {
@@ -49,7 +54,7 @@
     }
 
 
-    function _setupMap() {
+    function _setupMap () {
         var markerEl;
 
         mapboxgl.accessToken = 'pk.eyJ1IjoidGhlbWlnaHR5Y2hyaXMiLCJhIjoiY2ozcmk4dnJ3MDAzbDJ3cjd1dGpkNXUxZSJ9.hb2cLAYkXJqdFrdzoydIpA';
@@ -78,7 +83,7 @@
     }
 
 
-    function _setupSlider() {
+    function _setupSlider () {
         var sliderRange = {
                 min: timestampMin,
                 max: timestampMax
@@ -95,7 +100,7 @@
         noUiSlider.create(slider, {
             start: timestampMax,
             tooltips: {
-                to: function(value) {
+                to: function (value) {
                     return moment.unix(value).calendar();
                 }
             },
@@ -104,7 +109,7 @@
             pips: {
                 mode: 'range',
                 density: 1000,
-                filter: function(value) {
+                filter: function (value) {
                     if (value == timestampMin || value == timestampMax) {
                         return 1;
                     }
@@ -112,7 +117,7 @@
                     return 0;
                 },
                 format: {
-                    to: function(value) {
+                    to: function (value) {
                         return moment.unix(value).format('lll');
                     }
                 }
@@ -121,17 +126,17 @@
 
         console.info('slider initialized:', slider);
 
-        slider.noUiSlider.on('update', function(values) {
+        slider.noUiSlider.on('update', function (values) {
             console.log('slider update', values);
             _loadDatum(timestampsMap[parseInt(values[0])]);
         });
     }
 
 
-    function _loadDatum(datum) {
+    function _loadDatum (datum) {
         if (!datum) {
             popup.setText('No data available');
-            returne;
+            return;
         }
 
         marker.setLngLat([datum.ReceiverLongitude, datum.ReceiverLatitude]); // TODO: use device location
@@ -144,10 +149,10 @@
 
         popup.setHTML([
             '<dl>',
-                '<dt>Sample Time</dt><dd>'+moment.unix(datum.Created).format('lll')+'</dd>',
-                '<dt>Temperature</dt><dd>'+datum.Temperature+'</dd>',
-                '<dt>Relative Humidity</dt><dd>'+datum.Humidity+'</dd>',
-                '<dt>Particle Concentration</dt><dd>'+datum.Concentration+'</dd>',
+            '    <dt>Sample Time</dt><dd>'+moment.unix(datum.Created).format('lll')+'</dd>',
+            '    <dt>Temperature</dt><dd>'+datum.Temperature+'</dd>',
+            '    <dt>Relative Humidity</dt><dd>'+datum.Humidity+'</dd>',
+            '    <dt>Particle Concentration</dt><dd>'+datum.Concentration+'</dd>',
             '</dl>'
         ].join(''));
     }
