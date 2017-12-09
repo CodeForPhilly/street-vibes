@@ -9,6 +9,7 @@
         timestamps = [], timestampMin, timestampMax, timestampDelta, timestampsLength,
         timestampsMap = {},
         markerInitialized = false,
+        routeLayerInitialized = false,
         map, slider, marker, popup;
 
 
@@ -25,8 +26,7 @@
 
         // initialize application
         _analyzeData();
-        _setupMap();
-        _setupSlider();
+        _setupMap(_setupSlider);
     }
 
     function _analyzeData () {
@@ -50,7 +50,7 @@
     }
 
 
-    function _setupMap () {
+    function _setupMap (onMapReady) {
         var markerEl;
 
         mapboxgl.accessToken = 'pk.eyJ1IjoibGF1cmVuYW5jb25hIiwiYSI6ImNqYXp1aXUxNjFreXYzMm1rajhtOXM0dW0ifQ.ZugYWk7x8Ldyaa3ILvx0ZA';
@@ -68,14 +68,18 @@
             touchRotate: false
         });
 
-        console.info('map initialized:', map);
+        map.on('load', function() {
+            console.info('map initialized:', map);
 
-        popup = new mapboxgl.Popup({offset: 5, anchor: 'top'});
-        popup.setText('This is a marker with some data');
+            popup = new mapboxgl.Popup({offset: 5, anchor: 'top'});
+            popup.setText('This is a marker with some data');
 
-        markerEl = document.createElement('div');
-        markerEl.className = 'marker-indego';
-        marker = new mapboxgl.Marker(markerEl, {offset: [-22, -63]});
+            markerEl = document.createElement('div');
+            markerEl.className = 'marker-indego';
+            marker = new mapboxgl.Marker(markerEl, {offset: [-22, -63]});
+
+            onMapReady();
+        });
     }
 
 
@@ -137,7 +141,7 @@
 
         console.log('loadDatum(%o) map=%o marker=%o', datum, map, marker);
 
-        marker.setLngLat([datum.properties.start_lon, datum.properties.start_lat]); // TODO: draw line with datum.geojson
+        marker.setLngLat([datum.properties.end_lon, datum.properties.end_lat]);
 
         if (!markerInitialized) {
             marker.setPopup(popup);
@@ -155,5 +159,31 @@
             '    <dt>Intensity</dt><dd>'+datum.properties.intensity+'</dd>',
             '</dl>'
         ].join(''));
+
+
+        if (routeLayerInitialized) {
+            map.getSource('currentTrip').setData(datum);
+        } else {
+            routeLayerInitialized = true;
+
+            map.addSource('currentTrip', {
+                type: 'geojson',
+                data: datum
+            });
+
+            map.addLayer({
+                id: 'route',
+                type: 'line',
+                source: 'currentTrip',
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    'line-color': '#888',
+                    'line-width': 8
+                }
+            });
+        }
     }
 })();
