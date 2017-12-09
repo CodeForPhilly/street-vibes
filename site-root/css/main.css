@@ -1,3 +1,8 @@
+.site-branding .text {
+  vertical-align: middle;
+  margin-left: 20px !important;
+}
+
 @media screen and (max-width: 568px) {
   /* line 6, ../sass/skeleton/_utilities.scss */
   .mobile-hidden {
