@@ -8,7 +8,7 @@
 {block css}
     {$dwoo.parent}
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
-    {cssmin "nouislider.css+data-map.css"}
+    {cssmin "nouislider.css+data-map.css" debug=true}
 {/block}
 
 {block js-bottom}
@@ -16,7 +16,7 @@
     <script>
         var sensorData = {JSON::translateObjects($data)|json_encode};
     </script>
-    {jsmin "moment.js+wnumb.js+nouislider.js+data-map.js"}
+    {jsmin "moment.js+wnumb.js+nouislider.js+data-map.js" debug=true}
 {/block}
 
 {block content}
